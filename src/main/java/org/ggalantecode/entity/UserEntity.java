@@ -12,7 +12,7 @@ import java.util.Map;
 @MongoEntity(collection = "user")
 public class UserEntity extends PanacheMongoEntity {
 
-    private String userId;
+    private String name;
 
     private Map<String, Double> owes;
 

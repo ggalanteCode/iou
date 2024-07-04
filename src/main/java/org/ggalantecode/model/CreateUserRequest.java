@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class CreateUserRequest {
 
-    private String userId;
+    private String name;
 
 }

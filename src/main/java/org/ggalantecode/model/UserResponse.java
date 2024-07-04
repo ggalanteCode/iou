@@ -9,7 +9,7 @@ import java.util.Map;
 @Setter
 public class UserResponse {
 
-    private String userId;
+    private String name;
 
     private Map<String, Double> owes;
 
