@@ -14,7 +14,7 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(source = "user", target = "name")
+    @Mapping(source = "userId", target = "userId")
     UserEntity createUserRequestToUserEntity(CreateUserRequest createUserRequest);
 
     UserResponse userEntityToUserResponse(UserEntity userEntity);
