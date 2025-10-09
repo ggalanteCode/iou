@@ -11,11 +11,6 @@ import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-/*
-    https://exercism.org/tracks/java/exercises/rest-api
-    https://developers.redhat.com/articles/2023/11/23/getting-started-mongodb-and-quarkus
-    https://quarkus.io/guides/mongodb-panache
- */
 @Path("/v1/iou")
 @Produces(APPLICATION_JSON)
 @Consumes(APPLICATION_JSON)
