@@ -3,10 +3,8 @@ package org.ggalantecode.service;
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.bson.Document;
 import org.ggalantecode.entity.UserEntity;
-import org.ggalantecode.exceptions.NotValidInputException;
-import org.ggalantecode.exceptions.UserNotFoundException;
+import org.ggalantecode.exceptions.*;
 import org.ggalantecode.repository.UserRepository;
 
 import java.util.*;

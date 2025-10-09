@@ -1,10 +1,8 @@
 package org.ggalantecode.mapper;
 
 import org.ggalantecode.entity.UserEntity;
-import org.ggalantecode.model.CreateUserRequest;
-import org.ggalantecode.model.UserResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.ggalantecode.model.*;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
