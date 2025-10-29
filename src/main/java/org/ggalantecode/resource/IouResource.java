@@ -73,8 +73,7 @@ public class IouResource {
     @POST
     @Path("/iou")
     public BaseResponse<List<UserResponse>> createIou(BaseRequest<CreateIouRequest> req) {
-        List<UserEntity> updatedUsers = iouService.createIou(
-                req.getData().getLenderId(), req.getData().getBorrowerId(), req.getData().getAmount());
+        List<UserEntity> updatedUsers = iouService.createIou(req.getData());
         List<UserResponse> res = UserMapper.INSTANCE.userEntitiesToUsersResponse(updatedUsers);
         return new BaseResponse<>(res);
     }
