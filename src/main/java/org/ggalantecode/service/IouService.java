@@ -1,6 +1,5 @@
 package org.ggalantecode.service;
 
-import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.ggalantecode.entity.UserEntity;
@@ -17,11 +16,11 @@ public class IouService {
     UserRepository userRepo;
 
     public List<UserEntity> getAllUsers() {
-        return userRepo.listAll(Sort.by("name"));
+        return userRepo.listAllUsers();
     }
 
     public List<UserEntity> getUsersByName(List<String> users) {
-        return userRepo.list("{'name':{$in: [?1]}}", Sort.by("name"), users);
+        return userRepo.listUsersByNames(users);
     }
 
     public UserEntity createUser(UserEntity user) {
