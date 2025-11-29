@@ -39,17 +39,17 @@ public class IouService {
         if(iouRequest.getAmount().equals(0.0)) {
             throw new NotValidInputException("the amount cannot be 0.0");
         }
-        UserEntity lenderEntity = userRepo.find("name", iouRequest.getLenderId()).firstResultOptional().orElseThrow(
+        UserEntity lender = userRepo.find("name", iouRequest.getLenderId()).firstResultOptional().orElseThrow(
                 () -> new UserNotFoundException("user \"" + iouRequest.getLenderId() + "\" not found")
         );
-        UserEntity borrowerEntity = userRepo.find("name", iouRequest.getBorrowerId()).firstResultOptional().orElseThrow(
+        UserEntity borrower = userRepo.find("name", iouRequest.getBorrowerId()).firstResultOptional().orElseThrow(
                 () -> new UserNotFoundException("user \"" + iouRequest.getBorrowerId() + "\" not found")
         );
-        updateLender(lenderEntity, iouRequest.getBorrowerId(), iouRequest.getAmount());
-        updateBorrower(borrowerEntity, iouRequest.getLenderId(), iouRequest.getAmount());
-        userRepo.update(lenderEntity);
-        userRepo.update(borrowerEntity);
-        return List.of(lenderEntity, borrowerEntity);
+        updateLender(lender, iouRequest.getBorrowerId(), iouRequest.getAmount());
+        updateBorrower(borrower, iouRequest.getLenderId(), iouRequest.getAmount());
+        userRepo.update(lender);
+        userRepo.update(borrower);
+        return List.of(lender, borrower);
     }
 
     private void updateLender(UserEntity lender, String nameOfBorrower, Double amount) {
