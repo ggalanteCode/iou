@@ -54,16 +54,18 @@ public class IouService {
 
     private void updateLender(UserEntity lender, String nameOfBorrower, Double amount) {
         lender.getOwed_by().put(nameOfBorrower, amount);
-        Double totalOwedBy = lender.getOwed_by().values().stream().reduce(0.0, Double::sum);
-        Double totalOwes = lender.getOwes().values().stream().reduce(0.0, Double::sum);
-        lender.setBalance(totalOwedBy - totalOwes);
+        updateUserBalance(lender);
     }
 
     private void updateBorrower(UserEntity borrower, String nameOfLender, Double amount) {
         borrower.getOwes().put(nameOfLender, amount);
-        Double totalOwedBy = borrower.getOwed_by().values().stream().reduce(0.0, Double::sum);
-        Double totalOwes = borrower.getOwes().values().stream().reduce(0.0, Double::sum);
-        borrower.setBalance(totalOwedBy - totalOwes);
+        updateUserBalance(borrower);
+    }
+
+    private void updateUserBalance(UserEntity user) {
+        Double totalOwedBy = user.getOwed_by().values().stream().reduce(0.0, Double::sum);
+        Double totalOwes = user.getOwes().values().stream().reduce(0.0, Double::sum);
+        user.setBalance(totalOwedBy - totalOwes);
     }
 
 }
