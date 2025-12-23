@@ -24,12 +24,16 @@ public class IouService {
     }
 
     public UserEntity createUser(UserEntity user) {
+        setUserWithDefaultValues(user);
+        userRepo.persist(user);
+        return user;
+    }
+
+    private void setUserWithDefaultValues(UserEntity user) {
         Map<String, Double> owes = new HashMap<>(), owedBy = new HashMap<>();
         user.setOwes(owes);
         user.setOwed_by(owedBy);
         user.setBalance(0.0);
-        userRepo.persist(user);
-        return user;
     }
 
     public List<UserEntity> createIou(CreateIouRequest iouRequest) {
