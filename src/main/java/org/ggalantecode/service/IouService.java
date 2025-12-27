@@ -6,6 +6,7 @@ import org.ggalantecode.entity.UserEntity;
 import org.ggalantecode.exceptions.*;
 import org.ggalantecode.model.CreateIouRequest;
 import org.ggalantecode.repository.UserRepository;
+import org.ggalantecode.validator.IouValidator;
 
 import java.util.*;
 
@@ -14,6 +15,9 @@ public class IouService {
 
     @Inject
     UserRepository userRepo;
+
+    @Inject
+    IouValidator iouValidator;
 
     public List<UserEntity> getAllUsers() {
         return userRepo.listAllUsers();
@@ -37,22 +41,25 @@ public class IouService {
     }
 
     public List<UserEntity> createIou(CreateIouRequest iouRequest) {
-        if(iouRequest.getLenderId().equals(iouRequest.getBorrowerId())) {
-            throw new NotValidInputException("lender and borrower cannot be the same person...");
-        }
-        if(iouRequest.getAmount().equals(0.0)) {
-            throw new NotValidInputException("the amount cannot be 0.0");
-        }
-        UserEntity lender = userRepo.find("name", iouRequest.getLenderId()).firstResultOptional().orElseThrow(
-                () -> new UserNotFoundException("user \"" + iouRequest.getLenderId() + "\" not found")
+        iouValidator.validateIouRequest(iouRequest);
+
+        String lenderName = iouRequest.getLenderId();
+        UserEntity lender = userRepo.find("name", lenderName).firstResultOptional().orElseThrow(
+                () -> new UserNotFoundException("user \"" + lenderName + "\" not found")
         );
-        UserEntity borrower = userRepo.find("name", iouRequest.getBorrowerId()).firstResultOptional().orElseThrow(
-                () -> new UserNotFoundException("user \"" + iouRequest.getBorrowerId() + "\" not found")
+
+        String borrowerName = iouRequest.getBorrowerId();
+        UserEntity borrower = userRepo.find("name", borrowerName).firstResultOptional().orElseThrow(
+                () -> new UserNotFoundException("user \"" + borrowerName + "\" not found")
         );
-        updateLender(lender, iouRequest.getBorrowerId(), iouRequest.getAmount());
-        updateBorrower(borrower, iouRequest.getLenderId(), iouRequest.getAmount());
+
+        Double amount = iouRequest.getAmount();
+        updateLender(lender, borrowerName, amount);
+        updateBorrower(borrower, lenderName, amount);
+
         userRepo.update(lender);
         userRepo.update(borrower);
+
         return List.of(lender, borrower);
     }
 
