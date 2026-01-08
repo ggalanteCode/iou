@@ -3,7 +3,6 @@ package org.ggalantecode.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.ggalantecode.entity.UserEntity;
-import org.ggalantecode.exceptions.*;
 import org.ggalantecode.model.CreateIouRequest;
 import org.ggalantecode.repository.UserRepository;
 import org.ggalantecode.validator.IouValidator;
@@ -14,22 +13,22 @@ import java.util.*;
 public class IouService {
 
     @Inject
-    UserRepository userRepo;
+    UserRepository userRepository;
 
     @Inject
     IouValidator iouValidator;
 
     public List<UserEntity> getAllUsers() {
-        return userRepo.listAllUsers();
+        return userRepository.listAllUsers();
     }
 
     public List<UserEntity> getUsersByName(List<String> users) {
-        return userRepo.listUsersByNames(users);
+        return userRepository.listUsersByNames(users);
     }
 
     public UserEntity createUser(UserEntity user) {
         setUserWithDefaultValues(user);
-        userRepo.persist(user);
+        userRepository.persist(user);
         return user;
     }
 
@@ -44,21 +43,16 @@ public class IouService {
         iouValidator.validateIouRequest(iouRequest);
 
         String lenderName = iouRequest.getLenderId();
-        UserEntity lender = userRepo.find("name", lenderName).firstResultOptional().orElseThrow(
-                () -> new UserNotFoundException("user \"" + lenderName + "\" not found")
-        );
+        UserEntity lender = userRepository.findUserByName(lenderName);
 
         String borrowerName = iouRequest.getBorrowerId();
-        UserEntity borrower = userRepo.find("name", borrowerName).firstResultOptional().orElseThrow(
-                () -> new UserNotFoundException("user \"" + borrowerName + "\" not found")
-        );
+        UserEntity borrower = userRepository.findUserByName(borrowerName);
 
         Double amount = iouRequest.getAmount();
         updateLender(lender, borrowerName, amount);
         updateBorrower(borrower, lenderName, amount);
 
-        userRepo.update(lender);
-        userRepo.update(borrower);
+        userRepository.update(lender, borrower);
 
         return List.of(lender, borrower);
     }
